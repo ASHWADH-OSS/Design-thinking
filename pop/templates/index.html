@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UrbanFlow Exchange</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
+        .token-card { background: #212529; color: white; border-radius: 15px; }
+        .route-card { border: none; border-radius: 12px; transition: 0.3s; }
+        .route-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+<div class="container py-5">
+    <div class="row mb-4 align-items-center">
+        <div class="col"><h1>🚦 UrbanFlow <small class="text-muted h6">v2.0</small></h1></div>
+        <div class="col-auto">
+            <div class="token-card p-3">
+                <small>Available Balance</small>
+                <h4 class="mb-0 text-warning">{{ user['tokens'] }} ₮</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-info border-0 shadow-sm">
+        <strong>AI Oracle Insight:</strong> Current temporal demand adds <strong>+{{ surge }} ₮</strong> to all routes.
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}{% for cat, msg in messages %}
+        <div class="alert alert-{{ cat }}">{{ msg }}</div>
+      {% endfor %}{% endif %}
+    {% endwith %}
+
+    <div class="row">
+        {% for r in routes %}
+        <div class="col-md-6 mb-4">
+            <div class="card route-card shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="card-title">{{ r.name }}</h5>
+                    <p class="text-muted mb-1">Current Load: {{ r.load }} units</p>
+                    <div class="progress mb-3" style="height: 6px;">
+                        <div class="progress-bar bg-primary" style="width: {{ r.load * 10 }}%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">{{ r.price }} <small class="h6">₮</small></h3>
+                        <a href="/buy/{{ r.id }}" class="btn btn-dark px-4">Buy Priority</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>
